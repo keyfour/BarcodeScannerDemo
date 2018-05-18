@@ -16,7 +16,6 @@ public class MyQRcodeScannerApp extends Application implements HasActivityInject
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerMyQRcodeScannerAppComponent.create().inject(this);
     }
 
     @Override

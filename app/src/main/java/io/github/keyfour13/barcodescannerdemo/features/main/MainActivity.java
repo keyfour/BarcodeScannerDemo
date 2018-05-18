@@ -2,8 +2,8 @@ package io.github.keyfour13.barcodescannerdemo.features.main;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -11,14 +11,12 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.net.URL;
 
-import dagger.android.AndroidInjection;
 import io.github.keyfour13.barcodescannerdemo.R;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
