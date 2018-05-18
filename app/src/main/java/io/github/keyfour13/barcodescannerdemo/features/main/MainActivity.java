@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
 
+import dagger.android.AndroidInjection;
 import io.github.keyfour13.barcodescannerdemo.R;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivity;
 import io.reactivex.Observable;
@@ -19,8 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     @SuppressLint("CheckResult")

@@ -13,7 +13,7 @@ public class ScannerModule {
 
     @Provides
     @Singleton
-    Scanner provideScanner() {
+    static Scanner provideScanner() {
         return new ZXScanner();
     }
 

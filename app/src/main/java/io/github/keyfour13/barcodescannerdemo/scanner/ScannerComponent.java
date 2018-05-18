@@ -10,5 +10,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {ScannerModule.class,ZXScanner.IntentIntegratorModule.class})
 public interface ScannerComponent {
-    Scanner scanner();
+    Scanner provideScanner();
 }

@@ -12,15 +12,13 @@ import com.google.zxing.integration.android.IntentResult;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import io.github.keyfour13.barcodescannerdemo.R;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.results.DaggerScanResultsContract;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.results.ScanResultsContract;
-import io.github.keyfour13.barcodescannerdemo.scanner.DaggerScannerComponent;
-import io.github.keyfour13.barcodescannerdemo.scanner.Scanner;
-import io.github.keyfour13.barcodescannerdemo.utils.DaggerUrlUtils;
+import io.github.keyfour13.barcodescannerdemo.scanner.ZXScanner;
 import io.github.keyfour13.barcodescannerdemo.utils.UrlValidationUtil;
 
 /**
@@ -33,16 +31,18 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
+    ScanResultsContract.View view;
     ScanResultsContract.Presenter presenter;
+    @Inject
+    ZXScanner scanner;
+    @Inject
     UrlValidationUtil validationUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        Scanner scanner = DaggerScannerComponent.builder().build().scanner();
-        presenter = DaggerScanResultsContract.builder().build().providePresenter();
-        validationUtil = DaggerUrlUtils.builder().build().validationUtil();
         scanner.scan(this);
     }
 
