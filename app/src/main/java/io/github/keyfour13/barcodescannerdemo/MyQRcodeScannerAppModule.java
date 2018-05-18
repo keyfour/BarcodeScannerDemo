@@ -6,7 +6,6 @@ import io.github.keyfour13.barcodescannerdemo.features.main.MainActivity;
 
 @Module
 public abstract class MyQRcodeScannerAppModule {
-
     @ContributesAndroidInjector
-    abstract MainActivity contributeActivityInhector();
+    abstract MainActivity contributeActivityInjector();
 }
