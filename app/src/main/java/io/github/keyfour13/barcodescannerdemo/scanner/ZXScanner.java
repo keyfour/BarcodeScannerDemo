@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -13,11 +12,9 @@ import dagger.Provides;
 /**
  * @author Alex Karpov <keyfour13@gmail.com> 2018
  */
-@Module
-public class ZXScanner {
+public class ZXScanner extends Scanner {
 
-    @Inject
-    @Singleton
+    @Override
     public void scan(Activity activity) {
         IntentIntegratorModule.provideIntegrator(activity).initiateScan();
     }

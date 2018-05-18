@@ -1,6 +1,11 @@
 package io.github.keyfour13.barcodescannerdemo.features.scanner.results;
 
+import javax.inject.Singleton;
 
+import dagger.Component;
+
+@Singleton
+@Component(modules = {ScanResultsModule.class})
 public interface ScanResultsContract {
 
     interface View {
@@ -13,5 +18,7 @@ public interface ScanResultsContract {
         void setView(ScanResultsContract.View view);
         void getResults();
     }
+
+    Presenter providePresenter();
 
 }

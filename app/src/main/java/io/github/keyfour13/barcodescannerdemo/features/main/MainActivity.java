@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void accept(Boolean bool) throws Exception {
             Intent intent = new Intent(activity, ScanActivity.class);
+            startActivity(intent);
         }
     }
 
