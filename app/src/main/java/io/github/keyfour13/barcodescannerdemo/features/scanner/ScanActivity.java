@@ -17,7 +17,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import io.github.keyfour13.barcodescannerdemo.R;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.results.ScanResultsContract;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenter;
 import io.github.keyfour13.barcodescannerdemo.scanner.ZXScanner;
 import io.github.keyfour13.barcodescannerdemo.utils.UrlValidationUtil;
 
@@ -31,8 +31,8 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
-    ScanResultsContract.View view;
-    ScanResultsContract.Presenter presenter;
+    @Inject
+    ScanResultsPresenter presenter;
     @Inject
     ZXScanner scanner;
     @Inject
