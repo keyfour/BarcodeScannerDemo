@@ -1,14 +1,14 @@
 package io.github.keyfour13.barcodescannerdemo.features.scanner;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
@@ -18,6 +18,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import io.github.keyfour13.barcodescannerdemo.R;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenter;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.view.ScanResultsFragment;
 import io.github.keyfour13.barcodescannerdemo.scanner.ZXScanner;
 import io.github.keyfour13.barcodescannerdemo.utils.UrlValidationUtil;
 
@@ -31,6 +32,7 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentInjector;
+    ScanResultsFragment fragment;
     @Inject
     ScanResultsPresenter presenter;
     @Inject
@@ -43,7 +45,11 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        scanner.scan(this);
+        if (savedInstanceState == null) {
+            scanner.scan(this);
+            Fragment fragment = new ScanResultsFragment();
+            getSupportFragmentManager().beginTransaction().add(fragment, "results_fraagment").commit();
+        }
     }
 
     @Override
@@ -55,19 +61,31 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                if(validationUtil.validateHTTP_URI(result.getContents())) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(result.getContents()));
-                    startActivity(intent);
-                }
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            ResultsEvent event = new ResultsEvent();
+            event.results = result.getContents();
+            presenter.setView(fragment);
+            EventBus.getDefault().post(event);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(presenter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(presenter);
+    }
+
+    public static class ResultsEvent {
+        String results;
+
+        public String getResults() {
+            return results;
         }
     }
 }
