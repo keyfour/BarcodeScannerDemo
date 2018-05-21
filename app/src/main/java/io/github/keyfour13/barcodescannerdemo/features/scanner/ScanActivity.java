@@ -35,7 +35,9 @@ public class ScanActivity extends AppCompatActivity {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        scanner.scan(this);
+        //scanner.scan(this);
+        Intent intent = new Intent(this, ScanResultsActivity.class);
+        startActivity(intent);
     }
 
     // Get the results:

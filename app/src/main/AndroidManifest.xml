@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.scanner.ScanActivity" />
+        <activity android:name=".features.scanner.results.ScanResultsActivity" />
     </application>
 
 </manifest>

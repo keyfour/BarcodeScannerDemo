@@ -1,8 +1,6 @@
 package io.github.keyfour13.barcodescannerdemo.features.scanner.results;
 
 
-import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivity;
-
 public interface ScanResultsContract {
 
     interface View {
@@ -12,7 +10,6 @@ public interface ScanResultsContract {
 
     interface Presenter {
         void setView(ScanResultsContract.View view);
-        void getResults(ScanActivity.ResultsEvent event);
     }
 
 }

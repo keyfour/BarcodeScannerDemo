@@ -9,24 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 import io.github.keyfour13.barcodescannerdemo.R;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.results.ScanResultsContract;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenter;
 
 public class ScanResultsFragment extends Fragment implements ScanResultsContract.View {
 
 
     @BindView(R.id.tvResults)
     TextView textView;
-
-    @Inject @Singleton
-    ScanResultsPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {

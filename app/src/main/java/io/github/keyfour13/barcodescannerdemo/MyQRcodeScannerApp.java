@@ -13,6 +13,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import io.github.keyfour13.barcodescannerdemo.features.main.MainActivity;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivity;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.ScanResultsActivity;
 
 public class MyQRcodeScannerApp extends Application implements HasActivityInjector {
 
@@ -31,7 +32,8 @@ public class MyQRcodeScannerApp extends Application implements HasActivityInject
     }
 
     @Component(modules = {AndroidInjectionModule.class, DaggerModule.class,
-            MainActivity.DaggerModule.class, ScanActivity.DaggerModule.class})
+            MainActivity.DaggerModule.class, ScanActivity.DaggerModule.class,
+            ScanResultsActivity.DaggerModule.class})
     public interface DaggerComponent extends AndroidInjector<MyQRcodeScannerApp> {}
 
     @Module
