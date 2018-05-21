@@ -1,60 +1,41 @@
+/*
+ * Copyright (c) Alexander Karpov 2018.
+ */
+
 package io.github.keyfour13.barcodescannerdemo.features.scanner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import org.greenrobot.eventbus.EventBus;
-
 import javax.inject.Inject;
 
+import dagger.Binds;
+import dagger.Module;
+import dagger.Subcomponent;
+import dagger.android.ActivityKey;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
+import dagger.multibindings.IntoMap;
 import io.github.keyfour13.barcodescannerdemo.R;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenter;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.results.view.ScanResultsFragment;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.ScanResultsActivity;
 import io.github.keyfour13.barcodescannerdemo.scanner.ZXScanner;
-import io.github.keyfour13.barcodescannerdemo.utils.UrlValidationUtil;
 
-/**
- * ${COPYRIGHT}
- * <p>
- * Created by aleksandr on 18.05.18.
- */
+public class ScanActivity extends AppCompatActivity {
 
-public class ScanActivity extends AppCompatActivity implements HasSupportFragmentInjector {
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> fragmentInjector;
-    ScanResultsFragment fragment;
-    @Inject
-    ScanResultsPresenter presenter;
     @Inject
     ZXScanner scanner;
-    @Inject
-    UrlValidationUtil validationUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        if (savedInstanceState == null) {
-            scanner.scan(this);
-            Fragment fragment = new ScanResultsFragment();
-            getSupportFragmentManager().beginTransaction().add(fragment, "results_fraagment").commit();
-        }
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return fragmentInjector;
+        scanner.scan(this);
     }
 
     // Get the results:
@@ -62,30 +43,24 @@ public class ScanActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            ResultsEvent event = new ResultsEvent();
-            event.results = result.getContents();
-            presenter.setView(fragment);
-            EventBus.getDefault().post(event);
+            Intent intent = new Intent(this, ScanResultsActivity.class);
+            startActivity(intent);
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(presenter);
+    @Module(subcomponents = ScanActivity.DaggerSubcomponent.class)
+    public static abstract class DaggerModule {
+        @Binds
+        @IntoMap
+        @ActivityKey(ScanActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity>
+        bindScanActivityInjectorFactory(ScanActivity.DaggerSubcomponent.Builder builder);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(presenter);
+    @Subcomponent(modules = {})
+    public interface DaggerSubcomponent extends AndroidInjector<ScanActivity> {
+        @Subcomponent.Builder
+        abstract class Builder extends AndroidInjector.Builder<ScanActivity> {}
     }
 
-    public static class ResultsEvent {
-        String results;
-
-        public String getResults() {
-            return results;
-        }
-    }
 }
