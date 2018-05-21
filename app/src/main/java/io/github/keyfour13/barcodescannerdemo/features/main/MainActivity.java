@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) Alexander Karpov 2018.
+ */
+
 package io.github.keyfour13.barcodescannerdemo.features.main;
 
 import android.annotation.SuppressLint;
@@ -8,7 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
 
+import dagger.Binds;
+import dagger.Module;
+import dagger.Subcomponent;
+import dagger.android.ActivityKey;
 import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.multibindings.IntoMap;
 import io.github.keyfour13.barcodescannerdemo.R;
 import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivity;
 import io.reactivex.Observable;
@@ -53,5 +63,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Module(subcomponents = MainActivity.DaggerSubcomponent.class)
+    public static abstract class DaggerModule {
+        @Binds
+        @IntoMap
+        @ActivityKey(MainActivity.class)
+        abstract AndroidInjector.Factory<? extends Activity>
+        bindMainActivityInjectorFactory(MainActivity.DaggerSubcomponent.Builder builder);
+    }
+
+    @Subcomponent(modules = {})
+    public interface DaggerSubcomponent extends AndroidInjector<MainActivity> {
+        @Subcomponent.Builder
+        public abstract class Builder extends AndroidInjector.Builder<MainActivity> {}
+    }
 
 }
