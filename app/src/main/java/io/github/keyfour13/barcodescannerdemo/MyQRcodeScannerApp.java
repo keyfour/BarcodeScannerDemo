@@ -11,8 +11,8 @@ import dagger.android.AndroidInjectionModule;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
-import io.github.keyfour13.barcodescannerdemo.features.main.MainActivityModule;
-import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivityModule;
+import io.github.keyfour13.barcodescannerdemo.features.main.MainActivity;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.ScanActivity;
 
 public class MyQRcodeScannerApp extends Application implements HasActivityInjector {
 
@@ -22,8 +22,7 @@ public class MyQRcodeScannerApp extends Application implements HasActivityInject
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerMyQRcodeScannerApp_MyQRcodeScannerAppComponent.create()
-        .inject(this);
+        DaggerMyQRcodeScannerApp_DaggerComponent.create().inject(this);
     }
 
     @Override
@@ -31,10 +30,10 @@ public class MyQRcodeScannerApp extends Application implements HasActivityInject
         return dispatchingActivityInjector;
     }
 
-    @Component(modules = {AndroidInjectionModule.class, MyQRcodeScannerAppModule.class,
-            MainActivityModule.class, ScanActivityModule.class})
-    public interface MyQRcodeScannerAppComponent extends AndroidInjector<MyQRcodeScannerApp> {}
+    @Component(modules = {AndroidInjectionModule.class, DaggerModule.class,
+            MainActivity.DaggerModule.class, ScanActivity.DaggerModule.class})
+    public interface DaggerComponent extends AndroidInjector<MyQRcodeScannerApp> {}
 
     @Module
-    public abstract class MyQRcodeScannerAppModule {}
+    public static abstract class DaggerModule {}
 }
