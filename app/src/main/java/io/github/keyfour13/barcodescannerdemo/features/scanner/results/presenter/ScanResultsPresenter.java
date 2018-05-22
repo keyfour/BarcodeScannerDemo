@@ -18,10 +18,4 @@ public class ScanResultsPresenter implements ScanResultsContract.Presenter {
         this.view = view;
     }
 
-    @Override
-    public void getResults() {
-        if (view != null) {
-
-        }
-    }
 }

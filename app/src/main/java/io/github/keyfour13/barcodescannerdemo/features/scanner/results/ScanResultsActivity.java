@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
@@ -45,6 +46,7 @@ public class ScanResultsActivity extends AppCompatActivity {
         bindScanActivityInjectorFactory(ScanResultsActivity.DaggerSubcomponent.Builder builder);
     }
 
+    @Singleton
     @Subcomponent(modules = {ResultsVP.DaggerModule.class})
     public interface DaggerSubcomponent extends AndroidInjector<ScanResultsActivity> {
         @Subcomponent.Builder
