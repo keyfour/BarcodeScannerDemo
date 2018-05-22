@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
@@ -20,6 +22,9 @@ public class ScanResultsFragment extends Fragment implements ScanResultsContract
 
     @BindView(R.id.tvResults)
     TextView textView;
+
+    @Inject
+    public ScanResultsFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {

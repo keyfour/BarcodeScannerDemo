@@ -2,6 +2,7 @@ package io.github.keyfour13.barcodescannerdemo.features.scanner.results;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
@@ -13,28 +14,40 @@ import dagger.Subcomponent;
 import dagger.android.ActivityKey;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import dagger.multibindings.IntoMap;
 import io.github.keyfour13.barcodescannerdemo.R;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenter;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.presenter.ScanResultsPresenterModule;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.view.ScanResultsFragment;
+import io.github.keyfour13.barcodescannerdemo.features.scanner.results.view.ScanResultsFragmentModule;
 
 /**
  * @author Alex Karpov <keyfour13@gmail.com> 2018
  */
-public class ScanResultsActivity extends AppCompatActivity {
-
-    private ScanResultsContract.View view;
-    private ScanResultsContract.Presenter presenter;
+public class ScanResultsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
     @Inject
-    ResultsVP vp;
+    AndroidInjector<Fragment> fragmentAndroidInjector;
+
+    @Inject
+    ScanResultsPresenter scanResultsPresenter;
+    @Inject
+    ScanResultsFragment scanResultsFragment;
+
+    ScanResultsContract.Presenter presenter;
+    ScanResultsContract.View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        view = vp.fragment;
-        presenter = vp.presenter;
-        presenter.setView(view);
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentAndroidInjector;
     }
 
     @Module(subcomponents = ScanResultsActivity.DaggerSubcomponent.class)
@@ -47,7 +60,7 @@ public class ScanResultsActivity extends AppCompatActivity {
     }
 
     @Singleton
-    @Subcomponent(modules = {ResultsVP.DaggerModule.class})
+    @Subcomponent(modules = {ScanResultsPresenterModule.class, ScanResultsFragmentModule.class})
     public interface DaggerSubcomponent extends AndroidInjector<ScanResultsActivity> {
         @Subcomponent.Builder
         abstract class Builder extends AndroidInjector.Builder<ScanResultsActivity> {}
