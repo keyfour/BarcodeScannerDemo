@@ -24,15 +24,15 @@ public class ScanResultsActivity extends AppCompatActivity {
     private ScanResultsContract.Presenter presenter;
 
     @Inject
-    ResultsFeature feature;
+    ResultsVP vp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-        view = feature.fragment;
-        presenter = feature.presenter;
+        view = vp.fragment;
+        presenter = vp.presenter;
         presenter.setView(view);
     }
 
@@ -45,7 +45,7 @@ public class ScanResultsActivity extends AppCompatActivity {
         bindScanActivityInjectorFactory(ScanResultsActivity.DaggerSubcomponent.Builder builder);
     }
 
-    @Subcomponent(modules = {ResultsFeature.DaggerModule.class})
+    @Subcomponent(modules = {ResultsVP.DaggerModule.class})
     public interface DaggerSubcomponent extends AndroidInjector<ScanResultsActivity> {
         @Subcomponent.Builder
         abstract class Builder extends AndroidInjector.Builder<ScanResultsActivity> {}

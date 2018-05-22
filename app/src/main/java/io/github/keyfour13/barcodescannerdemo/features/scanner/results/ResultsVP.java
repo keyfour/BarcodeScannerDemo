@@ -18,7 +18,7 @@ import io.github.keyfour13.barcodescannerdemo.features.scanner.results.view.Scan
 /**
  * @author Alex Karpov <keyfour13@gmail.com> 2018
  */
-public class ResultsFeature {
+public class ResultsVP {
 
     @Inject
     ScanResultsPresenter presenter;
@@ -27,21 +27,21 @@ public class ResultsFeature {
     ScanResultsFragment fragment;
 
     @Inject
-    public ResultsFeature() {}
+    public ResultsVP() {}
 
     @Module
     public static class DaggerModule {
         @Provides @Singleton
-        static ResultsFeature provideResultsFeature() {
-            return new ResultsFeature();
+        static ResultsVP provideResultsFeature() {
+            return new ResultsVP();
         }
     }
 
     @Singleton
-    @Component(modules = {ResultsFeature.DaggerModule.class,
+    @Component(modules = {ResultsVP.DaggerModule.class,
             ScanResultsPresenterModule.class, ScanResultsFragmentModule.class})
     public interface DaggerComponent {
-        ResultsFeature provodeResultsFeature();
+        ResultsVP provodeResultsFeature();
     }
 
 }
